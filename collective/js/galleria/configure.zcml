@@ -1,8 +1,26 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:five="http://namespaces.zope.org/five"
     i18n_domain="collective.js.galleria">
 
   <five:registerPackage package="." initialize=".initialize" />
+
+  <browser:resource
+    name="collective.galleria.classic.css"
+    file="resources/galleria.classic.css"
+    />
+  <browser:resource
+    name="collective.galleria.classic.js"
+    file="resources/galleria.classic.js"
+    />
+  <browser:resource
+    name="collective.galleria.js"
+    file="resources/galleria.js"
+    />
+  <browser:resourceDirectory
+    name="collective.galleria"
+    directory="resources/images"
+    />
 
 </configure>

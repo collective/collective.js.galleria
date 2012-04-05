@@ -3,7 +3,7 @@ Introduction
 
 This addon register Galleria_ JQuery plugin in Plone's resource registries.
 
-version: 1.2.4
+version: 1.2.6 2011-12-12
 
 About Galleria
 ==============

@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.5 (unreleased)
+1.2.3 (2012-08-15)
 ------------------
 
 - Fix typo in previous release

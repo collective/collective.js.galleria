@@ -33,7 +33,7 @@
     />
 
   <genericsetup:upgradeStep
-      source="1000"
+      source="*"
       destination="1002"
       title="Cook resources"
       description=""

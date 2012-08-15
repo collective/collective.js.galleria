@@ -5036,7 +5036,7 @@ Galleria.addTheme = function( theme ) {
 
         // look for manually added CSS
         $('link').each(function( i, link ) {
-            reg = new RegExp( theme.cssreplace('\+\+resource\+\+','\\+\\+resource\\+\\+') );
+            reg = new RegExp( theme.css.replace('\+\+resource\+\+','\\+\\+resource\\+\\+') );
             if ( reg.test( link.href ) ) {
 
                 // we found the css

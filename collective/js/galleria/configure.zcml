@@ -34,7 +34,7 @@
 
   <genericsetup:upgradeStep
       source="1000"
-      destination="1001"
+      destination="1002"
       title="Cook resources"
       description=""
       profile="collective.js.galleria:default"

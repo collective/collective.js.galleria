@@ -52,6 +52,7 @@ Authors
 Contributors
 
 - Nathan VANGHEEM <vangheem@gmail.com>
+- Cleber J Santos <cleber@cleberjsantos.com.br>
 
 .. |makinacom| image:: http://depot.makina-corpus.org/public/logo.gif
 .. _makinacom:  http://www.makina-corpus.com

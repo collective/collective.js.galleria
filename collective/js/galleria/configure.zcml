@@ -31,6 +31,10 @@
     name="collective.galleria"
     directory="resources/images"
     />
+  <browser:resourceDirectory
+    name="collective.galleria.plugins"
+    directory="resources/plugins"
+    />
 
   <genericsetup:upgradeStep
       source="*"

@@ -3,8 +3,6 @@ import unittest2 as unittest
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 
-from plone.browserlayer.utils import registered_layers
-
 from collective.js.galleria.testing import INTEGRATION_TESTING
 
 PROJECTNAME = 'collective.js.galleria'

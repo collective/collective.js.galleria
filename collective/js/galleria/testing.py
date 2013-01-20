@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
-import urllib2
-
-from App.Common import package_home
 
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE

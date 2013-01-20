@@ -57,4 +57,15 @@ Contributors
 .. |makinacom| image:: http://depot.makina-corpus.org/public/logo.gif
 .. _makinacom:  http://www.makina-corpus.com
 .. _galleria: http://galleria.aino.se
- 
+
+
+Mostly Harmless
+---------------
+
+.. image:: https://travis-ci.org/collective/collective.js.galleria.png
+    :target: http://travis-ci.org/collective/collective.js.galleria
+
+Have an idea? Found a bug? Let us know by `opening a support ticket`_.
+
+.. _`opening a support ticket`: https://github.com/collective/collective.js.galleria/issues
+

@@ -7,9 +7,7 @@ from collective.js.galleria.testing import INTEGRATION_TESTING
 
 PROJECTNAME = 'collective.js.galleria'
 
-JS = [
-    '++resource++collective.galleria.js',
-    ]
+JS = ['++resource++collective.galleria.js']
 
 
 class InstallTestCase(unittest.TestCase):

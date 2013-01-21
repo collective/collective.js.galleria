@@ -9,7 +9,7 @@
 
 SHELL = /bin/sh
 
-options = -N -q -t 3
+options = -N -q -t 7
 src = collective/js/galleria/
 minimum_coverage = 84
 pep8_ignores = E501
@@ -26,10 +26,10 @@ nodejs-install:
 	sudo apt-get install nodejs npm -y
 
 csslint-install: nodejs-install
-	npm install csslint -g
+	sudo npm install csslint -g
 
 jshint-install: nodejs-install
-	npm install jshint -g
+	sudo npm install jshint -g
 
 python-validation:
 	@echo Validating Python files
@@ -45,7 +45,7 @@ js-validation: ack-install jshint-install
 
 quality-assurance: python-validation css-validation js-validation
 	@echo Quality assurance
-	./coverage.sh $(minimum_coverage)
+	bin/coverage.sh $(minimum_coverage)
 
 install:
 	mkdir -p buildout-cache/downloads

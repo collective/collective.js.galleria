@@ -3,8 +3,11 @@ python: 2.7
 env:
   - TARGET=tests
   - TARGET=quality-assurance
+before_install:
+  - sudo apt-get install -qq build-essential libssl-dev libxml2-dev libxslt1-dev libbz2-dev zlib1g-dev python-dev libjpeg62-dev libreadline-gplv2-dev python-imaging
 before_script:
   - export DISPLAY=:99.0
+  - export NODE_PATH=/usr/local/lib/node_modules
   - sh -e /etc/init.d/xvfb start
 install: make install
 script: make $TARGET

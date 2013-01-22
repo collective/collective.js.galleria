@@ -33,8 +33,6 @@ setup(name='collective.js.galleria',
       extras_require={
         'test': [
           'plone.app.testing',
-          'robotsuite',
-          'robotframework-selenium2library',
           ],
         },
       entry_points="""

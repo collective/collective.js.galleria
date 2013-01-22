@@ -1,13 +1,26 @@
 language: python
 python: 2.7
 env:
-  - TARGET=tests
-  - TARGET=quality-assurance
+  - TARGET=test
+  - TARGET=coverage.sh
+  - TARGET=python-validation.sh
+  - TARGET=css-validation.sh
+  - TARGET=js-validation.sh
 before_install:
-  - sudo apt-get install -qq build-essential libssl-dev libxml2-dev libxslt1-dev libbz2-dev zlib1g-dev python-dev libjpeg62-dev libreadline-gplv2-dev python-imaging
+  - sudo apt-get install ack-grep
+  - sudo apt-add-repository ppa:chris-lea/node.js -y
+  - sudo apt-get update 1>/dev/null
+  - sudo apt-get install nodejs npm -y
+  - npm install csslint -g
+  - npm install jshint -g
 before_script:
   - export DISPLAY=:99.0
   - export NODE_PATH=/usr/local/lib/node_modules
   - sh -e /etc/init.d/xvfb start
-install: make install
-script: make $TARGET
+install: 
+  - mkdir -p buildout-cache/eggs
+  - mkdir -p buildout-cache/downloads
+  - python bootstrap.py -c travis.cfg
+  - bin/buildout -N -t 3 -c travis.cfg install download install
+  - bin/buildout -N -t 3 -c travis.cfg
+script: bin/$TARGET

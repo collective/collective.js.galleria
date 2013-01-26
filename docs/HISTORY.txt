@@ -1,11 +1,13 @@
 Changelog
 =========
 
-1.2.5 (unreleased)
+1.2.5 (2013-01-26)
 ------------------
 
 - Add plugins as browser resources directory
   [cleberjsantos]
+- Add travis-ci integration with test + python-validation
+  [cleberjsantos][toutpt]
 
 1.2.4 (2013-01-10)
 ------------------

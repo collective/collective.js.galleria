@@ -5,6 +5,10 @@ This addon register Galleria_ JQuery plugin in Plone's resource registries.
 
 version: 1.2.9
 
+.. image:: https://secure.travis-ci.org/collective/collective.js.galleria.png
+    :target: http://travis-ci.org/collective/collective.js.galleria
+
+
 About Galleria
 ==============
 

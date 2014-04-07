@@ -17,11 +17,11 @@
 
   <browser:resource
     name="collective.galleria.classic.css"
-    file="resources/galleria.classic.css"
+    file="resources/themes/classic/galleria.classic.css"
     />
   <browser:resource
     name="collective.galleria.classic.js"
-    file="resources/galleria.classic.js"
+    file="resources/themes/classic/galleria.classic.js"
     />
   <browser:resource
     name="collective.galleria.js"

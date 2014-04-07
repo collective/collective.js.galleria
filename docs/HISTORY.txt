@@ -1,10 +1,11 @@
 Changelog
 =========
 
-1.2.6 (unreleased)
-------------------
+1.3 (unreleased)
+----------------
 
-- Nothing changed yet.
+- Update galleria to 1.3.5 
+  [ichim-david]
 
 
 1.2.5 (2013-01-26)

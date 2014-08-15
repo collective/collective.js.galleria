@@ -4,6 +4,9 @@ Changelog
 1.3 (unreleased)
 ----------------
 
+- Update galleria to 1.3.6
+  [fredvd]
+
 - Update galleria to 1.3.5 
   [ichim-david]
 

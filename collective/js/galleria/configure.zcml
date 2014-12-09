@@ -45,4 +45,13 @@
       handler=".upgrades.cookResources"
       />
 
+  <genericsetup:upgradeStep
+      source="1003"
+      destination="1004"
+      title="Cook resources"
+      description=""
+      profile="collective.js.galleria:default"
+      handler=".upgrades.cookResources"
+      />
+      
 </configure>

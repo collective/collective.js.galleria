@@ -1,2 +1,3 @@
 recursive-include collective *
+graft docs
 global-exclude *pyc

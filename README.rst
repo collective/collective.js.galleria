@@ -3,7 +3,7 @@ Introduction
 
 This addon register Galleria_ JQuery plugin in Plone's resource registries.
 
-version: 1.2.9
+version: 1.3.6
 
 About Galleria
 ==============
@@ -68,6 +68,8 @@ Contributors
 
 - Nathan VANGHEEM <vangheem@gmail.com>
 - Cleber J Santos <cleber@cleberjsantos.com.br>
+- David Ichim <ichim.david@gmail.com>
+- Fred van Dijk <f.van.dijk@zestsoftware.nl>
 
 .. |makinacom| image:: http://depot.makina-corpus.org/public/logo.gif
 .. _makinacom:  http://www.makina-corpus.com

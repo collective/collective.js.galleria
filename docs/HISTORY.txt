@@ -4,6 +4,9 @@ Changelog
 1.3 (unreleased)
 ----------------
 
+- Add uninstall profile.
+  [thet]
+
 - Update galleria to 1.3.5 
   [ichim-david]
 

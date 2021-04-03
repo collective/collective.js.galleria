@@ -23,9 +23,9 @@ before_install:
     - virtualenv -p `which python` .
     - mkdir $HOME/.buildout
     - mkdir -p $HOME/buildout-cache/{downloads,eggs,extends}
-    - echo "[buildout]" > $HOME/buildout.cfg
-    - echo "extends = test_plone$PLONE_VERSION.cfg" >> $HOME/buildout.cfg
-    - echo "eggs-directory = $HOME/buildout-cache/eggs" >> $HOME/buildout.cfg
+    - echo "[buildout]" > ./buildout.cfg
+    - echo "extends = test_plone$PLONE_VERSION.cfg" >> ./buildout.cfg
+    - echo "eggs-directory = $HOME/buildout-cache/eggs" >> ./buildout.cfg
     - bin/pip install -r requirements.txt
     - bin/buildout -N -t 3 annotate
 

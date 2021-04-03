@@ -1,6 +1,6 @@
 <layers>
 <!-- uncomment to activate
     <layer name="collective.js.galleria"
-           interface="collective.js.galleria.interfaces.ILayer" />
+           interface="collective.js.galleria.interfaces.IJsGalleriaLayer" />
 -->
 </layers>

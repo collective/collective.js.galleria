@@ -3,7 +3,7 @@
     i18n:domain="collective.js.galleria">
 
   <records remove="True" 
-           prefix="plone.bundles/galleria"
+           prefix="plone.bundles/galleria.js"
            interface='Products.CMFPlone.interfaces.IBundleRegistry' />
 
 </registry>

@@ -6,7 +6,6 @@
            interface='Products.CMFPlone.interfaces.IBundleRegistry'>
 
     <value key="compile">False</value>
-    <value key="load_defer">True</value>
     <value key="merge_with">default</value>
     <value key="enabled">True</value>
     <value key="depends">plone</value>

@@ -32,7 +32,7 @@ class InstallTestCase(unittest.TestCase):
 
     def test_jsregistry(self):
         bundles = self.registry.collectionOfInterface(IBundleRegistry, prefix="plone.bundles")
-        bundle = bundles['galleria']
+        bundle = bundles['galleria.js']
 
         self.assertEqual(bundle.jscompilation,
             JS,

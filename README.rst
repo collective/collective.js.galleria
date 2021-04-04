@@ -12,16 +12,38 @@ Galleria is a JavaScript image gallery framework built on top of the jQuery
 library. The aim is to simplify the process of creating professional image
 galleries for the web and mobile devices.
 
+
+Requirements
+============
+
+- Plone 5.2 (tested)
+- Python 3.6+, 2.7 (tested)
+
+
 How to install
 ==============
 
 .. image:: https://secure.travis-ci.org/collective/collective.js.galleria.png
     :target: http://travis-ci.org/collective/collective.js.galleria
 
-This addon can be installed as any other Plone addon. Please follow official
-documentation_.
 
-.. _documentation: http://plone.org/documentation/kb/installing-add-ons-quick-how-to
+To enable this package in a buildout-based installation:
+
+#. Edit your buildout.cfg and add ``collective.js.galleria`` to the list of eggs to install:
+
+.. code-block:: ini
+
+    [buildout]
+    ...
+    eggs =
+        collective.js.galleria
+
+After updating the configuration you need to run ''bin/buildout'', which will take care of updating your system.
+
+Go to the 'Site Setup' page in a Plone site and click on the 'Add-ons' link.
+
+Check the box next to ``collective.js.galleria`` and click the 'Activate' button.
+
 
 Have an idea? Found a bug? Let us know by `opening a support ticket`_.
 
@@ -37,14 +59,20 @@ and css called by the template.
 
     // look for manually added CSS
     $('link').each(function( i, link ) {
+        // Patch for Plone
         reg = new RegExp( theme.css.replace('\+\+resource\+\+','\\+\\+resource\\+\\+') );
         if ( reg.test( link.href ) ) {
+
             // we found the css
             css = true;
-            Galleria.theme = theme;
+
+            // the themeload trigger
+            _themeLoad( theme );
+
             return false;
         }
     });
+
 
 As you can see the original code has been patched to support ++resource++ url.
 

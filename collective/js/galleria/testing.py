@@ -4,7 +4,7 @@ from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import applyProfile
-from plone.testing.z2 import ZSERVER_FIXTURE
+from plone.testing.zope import WSGI_SERVER
 import collective.js.galleria
 
 
@@ -26,6 +26,6 @@ INTEGRATION_TESTING = IntegrationTesting(
 
 
 FUNCTIONAL_TESTING = FunctionalTesting(
-    bases=(FIXTURE, ZSERVER_FIXTURE),
+    bases=(FIXTURE, WSGI_SERVER),
     name='collective.js.galleria:Functional',
 )

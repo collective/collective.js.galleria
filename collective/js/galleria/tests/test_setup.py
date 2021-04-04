@@ -26,7 +26,7 @@ class InstallTestCase(unittest.TestCase):
 
     def test_installed(self):
         self.assertTrue(
-            self.qi_tool.is_product_installed(PROJECTNAME),
+            self.qi_tool.isProductInstalled(PROJECTNAME),
             'package appears not to have been installed',
         )
 
@@ -45,14 +45,16 @@ class UninstallTestCase(unittest.TestCase):
 
     def setUp(self):
         self.portal = self.layer['portal']
+        self.request = self.layer['request']
+        self.registry = getUtility(IRegistry)
         self.qi_tool = get_installer(self.portal, self.request)
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        self.qi_tool.uninstall_products(products=[PROJECTNAME])
+        self.qi_tool.uninstallProducts(products=[PROJECTNAME])
 
     def test_uninstalled(self):
-        self.assertFalse(self.qi.is_product_installed(PROJECTNAME))
+        self.assertFalse(self.qi_tool.isProductInstalled(PROJECTNAME))
 
     def test_jsregistry_removed(self):
         bundles = self.registry.collectionOfInterface(IBundleRegistry, prefix="plone.bundles")
 
-        self.assertNotIn('galleria', bundles.keys())
+        self.assertNotIn('galleria.js', bundles.keys())

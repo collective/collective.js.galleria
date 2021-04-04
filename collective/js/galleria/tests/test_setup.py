@@ -11,7 +11,7 @@ import unittest
 
 
 PROJECTNAME = 'collective.js.galleria'
-JS = '++resource++collective.galleria.js'
+JS = '++resource++collective.galleria.min.js'
 
 
 class InstallTestCase(unittest.TestCase):

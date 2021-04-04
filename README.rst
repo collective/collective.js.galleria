@@ -3,7 +3,7 @@ Introduction
 
 This addon register Galleria_ JQuery plugin in Plone's resource registries.
 
-version: 1.2.9
+version: 1.6.1
 
 About Galleria
 ==============
@@ -48,6 +48,8 @@ and css called by the template.
 
 As you can see the original code has been patched to support ++resource++ url.
 
+Starting from version 1.6.1 this package is compatible only with Plone 5.2
+
 
 Credits
 =======
@@ -66,6 +68,4 @@ Authors
 
 .. |makinacom| image:: http://depot.makina-corpus.org/public/logo.gif
 .. _makinacom:  http://www.makina-corpus.com
-.. _galleria: http://galleria.aino.se
-
-
+.. _galleria: https://galleriajs.github.io/ 

@@ -27,6 +27,7 @@ src/*
 dist/*
 test.plone_addon/
 var/
+share/
 .installed.cfg
 .mr.developer.cfg
 lib64

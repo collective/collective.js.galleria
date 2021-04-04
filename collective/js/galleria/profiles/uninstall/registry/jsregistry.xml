@@ -2,8 +2,6 @@
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     i18n:domain="collective.js.galleria">
 
-  <records remove="True" 
-           prefix="plone.bundles/galleria.js"
-           interface='Products.CMFPlone.interfaces.IBundleRegistry' />
+  <records remove="True" prefix="plone.bundles/galleria.js" interface='Products.CMFPlone.interfaces.IBundleRegistry' />
 
 </registry>

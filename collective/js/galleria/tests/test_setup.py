@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
+from collective.js.galleria.testing import INTEGRATION_TESTING
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.interfaces import IBundleRegistry
 from Products.CMFPlone.utils import get_installer
-from collective.js.galleria.testing import INTEGRATION_TESTING
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import setRoles
-from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
 import unittest
+
 
 PROJECTNAME = 'collective.js.galleria'
 JS = '++resource++collective.galleria.js'
@@ -31,12 +32,10 @@ class InstallTestCase(unittest.TestCase):
         )
 
     def test_jsregistry(self):
-        bundles = self.registry.collectionOfInterface(IBundleRegistry, prefix="plone.bundles")
+        bundles = self.registry.collectionOfInterface(IBundleRegistry, prefix='plone.bundles')
         bundle = bundles['galleria.js']
 
-        self.assertEqual(bundle.jscompilation,
-            JS,
-        )
+        self.assertEqual(bundle.jscompilation, JS)
 
 
 class UninstallTestCase(unittest.TestCase):
@@ -55,6 +54,6 @@ class UninstallTestCase(unittest.TestCase):
         self.assertFalse(self.qi_tool.isProductInstalled(PROJECTNAME))
 
     def test_jsregistry_removed(self):
-        bundles = self.registry.collectionOfInterface(IBundleRegistry, prefix="plone.bundles")
+        bundles = self.registry.collectionOfInterface(IBundleRegistry, prefix='plone.bundles')
 
         self.assertNotIn('galleria.js', bundles.keys())

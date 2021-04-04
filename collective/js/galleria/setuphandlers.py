@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from Products.CMFPlone.interfaces import INonInstallable
 from zope.interface import implementer
-from plone import api
 
 
 @implementer(INonInstallable)
@@ -11,6 +10,7 @@ class HiddenProfiles(object):
         return [
             'collective.js.galleria:uninstall',
         ]
+
 
 def post_install(context):
     """Post install script"""

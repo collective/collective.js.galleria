@@ -10,7 +10,7 @@
     <value key="enabled">True</value>
     <value key="depends">plone</value>
 
-    <value key="jscompilation">++resource++collective.galleria.js</value>
+    <value key="jscompilation">++resource++collective.galleria.min.js</value>
 
     <!-- Please keep this in sync with upgrades.update_last_compilation -->
     <value key="last_compilation">2021-04-03 15:00:00</value>

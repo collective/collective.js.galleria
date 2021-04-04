@@ -18,6 +18,11 @@
     file="resources/galleria.js"
     />
 
+  <browser:resource
+    name="collective.galleria.min.js"
+    file="resources/galleria.min.js"
+    />
+
   <browser:resourceDirectory
     name="collective.galleria"
     directory="resources/images"

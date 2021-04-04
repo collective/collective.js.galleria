@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-
-from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import PLONE_FIXTURE
-from plone.app.testing import IntegrationTesting
+from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
+from plone.app.testing import IntegrationTesting
+from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from plone.testing.zope import WSGI_SERVER
 
-from plone.testing.z2 import ZSERVER_FIXTURE
+import collective.js.galleria
 
 
 class Fixture(PloneSandboxLayer):
@@ -13,13 +14,10 @@ class Fixture(PloneSandboxLayer):
     defaultBases = (PLONE_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
-        # Load ZCML
-        import collective.js.galleria
         self.loadZCML(package=collective.js.galleria)
 
     def setUpPloneSite(self, portal):
-        # Install into Plone site using portal_setup
-        self.applyProfile(portal, 'collective.js.galleria:default')
+        applyProfile(portal, 'collective.js.galleria:default')
 
 FIXTURE = Fixture()
 INTEGRATION_TESTING = IntegrationTesting(
@@ -29,6 +27,6 @@ INTEGRATION_TESTING = IntegrationTesting(
 
 
 FUNCTIONAL_TESTING = FunctionalTesting(
-    bases=(FIXTURE, ZSERVER_FIXTURE),
+    bases=(FIXTURE, WSGI_SERVER),
     name='collective.js.galleria:Functional',
 )

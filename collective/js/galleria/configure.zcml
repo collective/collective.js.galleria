@@ -1,55 +1,17 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser"
-    xmlns:five="http://namespaces.zope.org/five"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="collective.js.galleria">
 
-  <five:registerPackage package="." initialize=".initialize" />
+  <include package=".upgrades"/>
+  <include file="profiles.zcml" />
+  <include file="browser.zcml" />
 
-  <genericsetup:registerProfile
-      name="default"
-      title="collective.js.galleria"
-      directory="profiles/default"
-      description="Installs the collective.js.galleria package"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-  <genericsetup:registerProfile
-      name="uninstall"
-      title="collective.js.galleria uninstall"
-      directory="profiles/uninstall"
-      description="Uninstalls the collective.js.galleria package"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <browser:resource
-    name="collective.galleria.classic.css"
-    file="resources/themes/classic/galleria.classic.css"
-    />
-  <browser:resource
-    name="collective.galleria.classic.js"
-    file="resources/themes/classic/galleria.classic.js"
-    />
-  <browser:resource
-    name="collective.galleria.js"
-    file="resources/galleria.js"
-    />
-  <browser:resourceDirectory
-    name="collective.galleria"
-    directory="resources/images"
-    />
-  <browser:resourceDirectory
-    name="collective.galleria.plugins"
-    directory="resources/plugins"
-    />
-
-  <genericsetup:upgradeStep
-      source="*"
-      destination="1003"
-      title="Cook resources"
-      description=""
-      profile="collective.js.galleria:default"
-      handler=".upgrades.cookResources"
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="collective.js.galleria-hiddenprofiles"
       />
 
 </configure>

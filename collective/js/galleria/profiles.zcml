@@ -1,0 +1,25 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="collective.js.galleria">
+
+  <genericsetup:registerProfile
+      name="default"
+      title="collective.js.galleria"
+      directory="profiles/default"
+      description="Installs the collective.js.galleria package"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler=".setuphandlers.post_install"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="collective.js.galleria uninstall"
+      directory="profiles/uninstall"
+      description="Uninstalls the collective.js.galleria package"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler=".setuphandlers.uninstall"
+      />
+
+</configure>

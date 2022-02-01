@@ -1,13 +1,44 @@
 /**
- * Galleria v 1.3.5 2014-01-25
- * http://galleria.io
+ * Galleria v1.6.1
  *
+ * Copyright (c) 2010 - 2019 worse is better UG
  * Licensed under the MIT license
- * https://raw.github.com/aino/galleria/master/LICENSE
  *
  */
 
-(function( $, window, Galleria, undef ) {
+/*
+ * Original code
+
+ ( function( window, factory ) {
+     if ( typeof define == 'function' && define.amd ) {
+         define( [ 'jquery' ], function( jQuery ) {
+             return factory( window, jQuery );
+         });
+     } else if ( typeof module == 'object' && module.exports ) {
+         module.exports = factory(
+             window,
+             require('jquery')
+         );
+     } else {
+         // browser global
+         window.Galleria = factory(
+             window,
+             window.jQuery
+         );
+     }
+ 
+ }( window, function factory( window, $, Galleria, undef ) {
+*/
+
+ // Patch for Plone
+ (function( window, factory ){
+         // browser global
+         window.Galleria = factory(
+             window,
+             window.jQuery
+         );
+
+ }( window, function factory( window, $, Galleria, undef ) {
 
 /*global jQuery, navigator, Image, module, define */
 
@@ -15,21 +46,26 @@
 var doc    = window.document,
     $doc   = $( doc ),
     $win   = $( window ),
+    jQuery = $,
 
 // native prototypes
     protoArray = Array.prototype,
 
 // internal constants
-    VERSION = 1.35,
+    VERSION = 1.61,
     DEBUG = true,
     TIMEOUT = 30000,
     DUMMY = false,
     NAV = navigator.userAgent.toLowerCase(),
     HASH = window.location.hash.replace(/#\//, ''),
-    PROT = window.location.protocol,
+    PROT = window.location.protocol == "file:" ? "http:" : window.location.protocol,
     M = Math,
     F = function(){},
     FALSE = function() { return false; },
+    MOBILE = !(
+        ( window.screen.width > 1279 && window.devicePixelRatio == 1 ) || // there are not so many mobile devices with more than 1280px and pixelRatio equal to 1 (i.e. retina displays are equal to 2...)
+        ( window.screen.width > 1000 && window.innerWidth < (window.screen.width * .9) ) // this checks in the end if a user is using a resized browser window which is not common on mobile devices
+    ),
     IE = (function() {
 
         var v = 3,
@@ -117,25 +153,18 @@ var doc    = window.document,
         youtube: {
             reg: /https?:\/\/(?:[a-zA_Z]{2,3}.)?(?:youtube\.com\/watch\?)((?:[\w\d\-\_\=]+&amp;(?:amp;)?)*v(?:&lt;[A-Z]+&gt;)?=([0-9a-zA-Z\-\_]+))/i,
             embed: function() {
-                return 'http://www.youtube.com/embed/' + this.id;
+                return PROT + '//www.youtube.com/embed/' + this.id;
             },
-            getUrl: function() {
-                return PROT + '//gdata.youtube.com/feeds/api/videos/' + this.id + '?v=2&alt=json-in-script&callback=?';
+            get_thumb: function( data ) {
+                return PROT + '//img.youtube.com/vi/'+this.id+'/default.jpg';
             },
-            get_thumb: function(data) {
-                return data.entry.media$group.media$thumbnail[2].url;
-            },
-            get_image: function(data) {
-                if ( data.entry.yt$hd ) {
-                    return PROT + '//img.youtube.com/vi/'+this.id+'/maxresdefault.jpg';
-                }
-                return data.entry.media$group.media$thumbnail[3].url;
-            }
+            get_image: function( data ) {
+                return PROT + '//img.youtube.com/vi/'+this.id+'/maxresdefault.jpg';            }
         },
         vimeo: {
             reg: /https?:\/\/(?:www\.)?(vimeo\.com)\/(?:hd#)?([0-9]+)/i,
             embed: function() {
-                return 'http://player.vimeo.com/video/' + this.id;
+                return PROT + '//player.vimeo.com/video/' + this.id;
             },
             getUrl: function() {
                 return PROT + '//vimeo.com/api/v2/video/' + this.id + '.json?callback=?';
@@ -182,13 +211,19 @@ var doc    = window.document,
 
         $.extend( this, _video[type] );
 
-        $.getJSON( this.getUrl(), function(data) {
+        _videoThumbs = function(data) {
             self.data = data;
             $.each( self.readys, function( i, fn ) {
                 fn( self.data );
             });
             self.readys = [];
-        });
+        };
+
+        if ( this.hasOwnProperty('getUrl') ) {
+            $.getJSON( this.getUrl(), _videoThumbs);
+        } else {
+            window.setTimeout(_videoThumbs, 400);
+        }
 
         this.getMedia = function( type, callback, fail ) {
             fail = fail || F;
@@ -228,7 +263,7 @@ var doc    = window.document,
 
         support: (function() {
             var html = DOM().html;
-            return !IFRAME && ( html.requestFullscreen || html.mozRequestFullScreen || html.webkitRequestFullScreen );
+            return !IFRAME && ( html.requestFullscreen || html.msRequestFullscreen || html.mozRequestFullScreen || html.webkitRequestFullScreen );
         }()),
 
         callback: F,
@@ -242,6 +277,9 @@ var doc    = window.document,
             elem = elem || DOM().html;
             if ( elem.requestFullscreen ) {
                 elem.requestFullscreen();
+            }
+            else if ( elem.msRequestFullscreen ) {
+                elem.msRequestFullscreen();
             }
             else if ( elem.mozRequestFullScreen ) {
                 elem.mozRequestFullScreen();
@@ -257,6 +295,9 @@ var doc    = window.document,
 
             if ( doc.exitFullscreen ) {
                 doc.exitFullscreen();
+            }
+            else if ( doc.msExitFullscreen ) {
+                doc.msExitFullscreen();
             }
             else if ( doc.mozCancelFullScreen ) {
                 doc.mozCancelFullScreen();
@@ -281,13 +322,14 @@ var doc    = window.document,
                 }
                 var fs = _nativeFullscreen.instance._fullscreen;
 
-                if ( doc.fullscreen || doc.mozFullScreen || doc.webkitIsFullScreen ) {
+                if ( doc.fullscreen || doc.mozFullScreen || doc.webkitIsFullScreen || ( doc.msFullscreenElement && doc.msFullscreenElement !== null ) ) {
                     fs._enter( _nativeFullscreen.callback );
                 } else {
                     fs._exit( _nativeFullscreen.callback );
                 }
             };
             doc.addEventListener( 'fullscreenchange', handler, false );
+            doc.addEventListener( 'MSFullscreenChange', handler, false );
             doc.addEventListener( 'mozfullscreenchange', handler, false );
             doc.addEventListener( 'webkitfullscreenchange', handler, false );
         }
@@ -308,19 +350,20 @@ var doc    = window.document,
     // instance pool, holds the galleries until themeLoad is triggered
     _pool = [],
 
-    // themeLoad trigger
+    // Run galleries from theme trigger
+    _loadedThemes = [],
     _themeLoad = function( theme ) {
 
-        Galleria.theme = theme;
+        _loadedThemes.push(theme);
 
         // run the instances we have in the pool
+        // and apply the last theme if not specified
         $.each( _pool, function( i, instance ) {
-            if ( !instance._initialized ) {
+            if ( instance._options.theme == theme.name || (!instance._initialized && !instance._options.theme) ) {
+                instance.theme = theme;
                 instance._init.call( instance );
             }
         });
-
-        _pool = [];
     },
 
     // the Utils singleton
@@ -861,7 +904,7 @@ var doc    = window.document,
 
                     Utils.wait({
                         until: function() {
-                            return $loader.height() == 1;
+                            return $loader.height() > 0;
                         },
                         success: function() {
                             $loader.remove();
@@ -873,7 +916,7 @@ var doc    = window.document,
                             // If failed, tell the dev to download the latest theme
                             Galleria.raise( 'Theme CSS could not load after 20 sec. ' + ( Galleria.QUIRK ?
                                 'Your browser is in Quirks Mode, please add a correct doctype.' :
-                                'Please download the latest theme at http://galleria.io/customer/.' ), true );
+                                'Please download the latest theme.' ), true );
                         },
                         timeout: 5000
                     });
@@ -1056,42 +1099,67 @@ _nativeFullscreen.listen();
 $.event.special['click:fast'] = {
     propagate: true,
     add: function(handleObj) {
-        var prop = this.propagate;
-        if ( Galleria.TOUCH ) {
-            $(this).on('touchstart.fast', function start(e) {
-                var ev = e.originalEvent,
-                    x, y, dist = 0;
-                if ( ev.touches.length == 1 ) {
-                    x = ev.touches[0].pageX;
-                    y = ev.touches[0].pageY;
-                    $(this).on('touchmove.fast', function(f) {
-                        var ft = f.originalEvent.touches;
-                        if ( ft.length == 1 ) {
-                            dist = M.max(
-                                M.abs( x - ft[0].pageX ),
-                                M.abs( y - ft[0].pageY )
-                            );
-                        }
-                    });
-                    $(this).on('touchend.fast', function() {
-                        if( dist > 4 ) {
-                            return $(this).off('touchend.fast touchmove.fast');
-                        }
-                        handleObj.handler.call(this, e);
-                        $(this).off('touchend.fast touchmove.fast');
-                    });
-                }
+
+        var getCoords = function(e) {
+            if ( e.touches && e.touches.length ) {
+                var touch = e.touches[0];
+                return {
+                    x: touch.pageX,
+                    y: touch.pageY
+                };
+            }
+        };
+
+        var def = {
+            touched: false,
+            touchdown: false,
+            coords: { x:0, y:0 },
+            evObj: {}
+        };
+
+        $(this).data({
+            clickstate: def,
+            timer: 0
+        }).on('touchstart.fast', function(e) {
+            window.clearTimeout($(this).data('timer'));
+            $(this).data('clickstate', {
+                touched: true,
+                touchdown: true,
+                coords: getCoords(e.originalEvent),
+                evObj: e
             });
-        } else {
-            $(this).on('click.fast', handleObj.handler);
-        }
+        }).on('touchmove.fast', function(e) {
+            var coords = getCoords(e.originalEvent),
+                state = $(this).data('clickstate'),
+                distance = Math.max(
+                    Math.abs(state.coords.x - coords.x),
+                    Math.abs(state.coords.y - coords.y)
+                );
+            if ( distance > 6 ) {
+                $(this).data('clickstate', $.extend(state, {
+                    touchdown: false
+                }));
+            }
+        }).on('touchend.fast', function(e) {
+            var $this = $(this),
+                state = $this.data('clickstate');
+            if(state.touchdown) {
+              handleObj.handler.call(this, e);
+            }
+            $this.data('timer', window.setTimeout(function() {
+                $this.data('clickstate', def);
+            }, 400));
+        }).on('click.fast', function(e) {
+            var state = $(this).data('clickstate');
+            if ( state.touched ) {
+                return false;
+            }
+            $(this).data('clickstate', def);
+            handleObj.handler.call(this, e);
+        });
     },
-    remove: function(handleObj) {
-        if ( Galleria.TOUCH ) {
-            $(this).off('touchstart.fast touchmove.fast touchend.fast');
-        } else {
-            $(this).off('click.fast', handleObj.handler);
-        }
+    remove: function() {
+        $(this).off('touchstart.fast touchmove.fast touchend.fast click.fast');
     }
 };
 
@@ -1108,7 +1176,7 @@ $win.on( 'orientationchange', function() {
 
     @example var gallery = new Galleria();
 
-    @author http://aino.se
+    @author http://wib.io
 
     @requires jQuery
 
@@ -1829,8 +1897,14 @@ Galleria = function() {
                             var image = self._controls.getActive().image;
                             if ( image ) {
                                 $( image ).width( big.image.width ).height( big.image.height )
-                                    .attr( 'style', $( big.image ).attr('style') )
-                                    .attr( 'src', big.image.src );
+                                    .attr( 'style', $( big.image ).attr('style') );
+                                if (big.image.src.srcset) {
+                                    $( image ).attr( 'srcset', big.image.src.srcset );
+                                }
+                                if (big.image.src.sizes) {
+                                    $( image ).attr( 'sizes', big.image.src.sizes );
+                                }
+                                $( image ).attr( 'src', big.image.src );
                             }
                         }
                     });
@@ -2601,6 +2675,7 @@ Galleria.prototype = {
             showCounter: true,
             showImagenav: true,
             swipe: 'auto', // 1.2.4 -> revised in 1.3 -> changed type in 1.3.5
+            theme: null,
             thumbCrop: true,
             thumbEventType: 'click:fast',
             thumbMargin: 0,
@@ -2637,19 +2712,27 @@ Galleria.prototype = {
         // legacy support for transitionInitial
         this._options.initialTransition = this._options.initialTransition || this._options.transitionInitial;
 
-        // turn off debug
-        if ( options && options.debug === false ) {
-            DEBUG = false;
-        }
+        if ( options ) {
 
-        // set timeout
-        if ( options && typeof options.imageTimeout === 'number' ) {
-            TIMEOUT = options.imageTimeout;
-        }
+            // turn off debug
+            if ( options.debug === false ) {
+                DEBUG = false;
+            }
 
-        // set dummy
-        if ( options && typeof options.dummy === 'string' ) {
-            DUMMY = options.dummy;
+            // set timeout
+            if ( typeof options.imageTimeout === 'number' ) {
+                TIMEOUT = options.imageTimeout;
+            }
+
+            // set dummy
+            if ( typeof options.dummy === 'string' ) {
+                DUMMY = options.dummy;
+            }
+
+            // set theme
+            if ( typeof options.theme == 'string' ) {
+                this._options.theme = options.theme;
+            }
         }
 
         // hide all content
@@ -2661,10 +2744,25 @@ Galleria.prototype = {
         }
 
         // now we just have to wait for the theme...
-        if ( typeof Galleria.theme === 'object' ) {
+        // first check if it has already loaded
+        if ( _loadedThemes.length ) {
+            if ( this._options.theme ) {
+                for ( var i=0; i<_loadedThemes.length; i++ ) {
+                    if( this._options.theme === _loadedThemes[i].name ) {
+                        this.theme = _loadedThemes[i];
+                        break;
+                    }
+                }
+            } else {
+                // if no theme sepcified, apply the first loaded theme
+                this.theme = _loadedThemes[0];
+            }
+        }
+
+        if ( typeof this.theme == 'object' ) {
             this._init();
         } else {
-            // push the instance into the pool and run it when the theme is ready
+            // if no theme is loaded yet, push the instance into a pool and run it when the theme is ready
             _pool.push( this );
         }
 
@@ -2686,13 +2784,13 @@ Galleria.prototype = {
 
         this._initialized = true;
 
-        if ( !Galleria.theme ) {
+        if ( !this.theme ) {
             Galleria.raise( 'Init failed: No theme found.', true );
             return this;
         }
 
         // merge the theme & caller options
-        $.extend( true, options, Galleria.theme.defaults, this._original.options, Galleria.configure.options );
+        $.extend( true, options, this.theme.defaults, this._original.options, Galleria.configure.options );
 
         // internally we use boolean for swipe
         options.swipe = (function(s) {
@@ -2701,7 +2799,7 @@ Galleria.prototype = {
 
             // legacy patch
             if( s === false || s == 'disabled' ) { return false; }
-            
+
             return !!Galleria.TOUCH;
 
         }( options.swipe ));
@@ -2831,7 +2929,11 @@ Galleria.prototype = {
         Utils.hide( self.get('tooltip') );
 
         // add a notouch class on the container to prevent unwanted :hovers on touch devices
-        this.$( 'container' ).addClass( ( Galleria.TOUCH ? 'touch' : 'notouch' ) + ' ' + this._options.variation );
+        this.$( 'container' ).addClass([
+            ( Galleria.TOUCH ? 'touch' : 'notouch' ),
+            this._options.variation,
+            'galleria-theme-'+this.theme.name
+        ].join(' '));
 
         // add images to the controls
         if ( !this._options.swipe ) {
@@ -2910,8 +3012,8 @@ Galleria.prototype = {
                        return;
                     }
 
-                    self.$( 'images' ).find( 'iframe' ).remove();
-                    self.$( 'images' ).find( '.galleria-frame' ).css('opacity', 0).hide();
+                    // remove video iframes
+                    self.$( 'images' ).find( '.galleria-frame' ).css('opacity', 0).hide().find( 'iframe' ).remove();
 
                     if ( self._options.carousel && self._options.carouselFollow ) {
                         self._carousel.follow( index );
@@ -3421,8 +3523,7 @@ Galleria.prototype = {
                 }
 
             // create empty spans if thumbnails is set to 'empty'
-            } else if ( data.iframe || optval === 'empty' || optval === 'numbers' ) {
-
+            } else if ( ( data.iframe && optval !== null ) || optval === 'empty' || optval === 'numbers' ) {
                 thumb = {
                     container: Utils.create( 'galleria-image' ),
                     image: Utils.create( 'img', 'span' ),
@@ -3506,12 +3607,14 @@ Galleria.prototype = {
                     }
                 },
                 thumbload = $( thumb.container ).data( 'thumbload' );
-            if ( thumb.video ) {
-                thumbload.call( self, thumb, callback );
-            } else {
-                thumb.load( data.src , function( thumb ) {
-                    thumbload.call( self, thumb, callback );
-                });
+            if (thumbload) {
+              if ( thumb.video ) {
+                  thumbload.call( self, thumb, callback );
+              } else {
+                  thumb.load( data.src , function( thumb ) {
+                      thumbload.call( self, thumb, callback );
+                  });
+              }
             }
         });
 
@@ -3699,7 +3802,7 @@ Galleria.prototype = {
                 self.trigger( Galleria.READY );
 
                 // call the theme init method
-                Galleria.theme.init.call( self, self._options );
+                self.theme.init.call( self, self._options );
 
                 // Trigger Galleria.ready
                 $.each( Galleria.ready.callbacks, function(i ,fn) {
@@ -3807,22 +3910,37 @@ Galleria.prototype = {
                 } else if( href && elem.hasClass('iframe') ) {
                     data.iframe = href;
                 } else {
-                    data.image = data.big = href;
+                    data.image = href;
                 }
 
                 if ( rel ) {
                     data.big = rel;
                 }
 
-                // alternative extraction from HTML5 data attribute, added in 1.2.7
-                $.each( 'big title description link layer image'.split(' '), function( i, val ) {
+                data.imagesrcset = parent.data( 'srcset' );
+                data.imagesizes = parent.data( 'sizes' );
+                data.thumbsizes = elem.attr( 'sizes' );
+                data.thumbsrcset = elem.attr( 'srcset' );
+
+                // alternative extraction from HTML5 data attribute
+                $.each( 'big bigsrcset bigsizes title description link layer image imagesrcset imagesizes'.split(' '), function( i, val ) {
                     if ( elem.data(val) ) {
                         data[ val ] = elem.data(val).toString();
                     }
                 });
 
+                if (elem.data('srcset')) {
+                    data.imagesrcset = elem.data('srcset');
+                }
+
+                if (elem.data('sizes')) {
+                    data.imagesizes = elem.data('sizes');
+                }
+
                 if ( !data.big ) {
                     data.big = data.image;
+                    data.bigsrcset = data.imagesrcset;
+                    data.bigsizes = data.imagesizes;
                 }
 
                 // mix default extractions with the hrefs and config
@@ -3883,6 +4001,15 @@ Galleria.prototype = {
         $.each( this._data, function( i, data ) {
 
             current = self._data[ i ];
+
+            // q&d hack to attach srcset & sizes to src
+            $.each( 'big image thumb'.split(' '), function( i, val ) {
+                if ( data[ val] ) {
+                    data[val] = new String(data[val]);
+                    data[val].srcset = data [val + 'srcset'];
+                    data[val].sizes = data [val + 'sizes'];
+                }
+            });
 
             // copy image as thumb if no thumb exists
             if ( 'thumb' in data === false ) {
@@ -3963,7 +4090,8 @@ Galleria.prototype = {
         this.clearTimer();
         Utils.removeFromArray( _instances, this );
         Utils.removeFromArray( _galleries, this );
-        if ( Galleria._waiters.length ) {
+        _video._inst = [];
+        if ( Galleria._waiters !== undefined && Galleria._waiters.length ) {
             $.each( Galleria._waiters, function( i, w ) {
                 if ( w ) window.clearTimeout( w );
             });
@@ -4426,6 +4554,16 @@ $(document).mousemove(function(e) {
     },
 
     /**
+        Tells you the theme name of the gallery
+
+        @returns {String} theme name
+    */
+
+    getThemeName : function() {
+        return this.theme.name;
+    },
+
+    /**
         Removes the panning effect set by addPan()
 
         @returns Instance
@@ -4851,6 +4989,7 @@ this.prependChild( 'info', 'myElement' );
                         image.isIframe = true;
                     }
                     image.load(src, function(image) {
+                        evObj.imageTarget = image.image;
                         self._scaleImage(image, complete).trigger($.extend(evObj, {
                             type: Galleria.IMAGE
                         }));
@@ -5584,7 +5723,7 @@ $.extend( Galleria, {
     IPHONE:  /iphone/.test( NAV ),
     IPAD:    /ipad/.test( NAV ),
     ANDROID: /android/.test( NAV ),
-    TOUCH:   ('ontouchstart' in doc)
+    TOUCH:   ( 'ontouchstart' in doc ) && MOBILE // rule out false positives on Win10
 
 });
 
@@ -5612,6 +5751,11 @@ Galleria.addTheme = function( theme ) {
         Galleria.raise('No theme name specified');
     }
 
+    // make sure it's compatible
+    if ( !theme.version || parseInt(Galleria.version*10) > parseInt(theme.version*10) ) {
+        Galleria.raise('This version of Galleria requires '+theme.name+' theme version '+parseInt(Galleria.version*10)/10+' or later', true);
+    }
+
     if ( typeof theme.defaults !== 'object' ) {
         theme.defaults = {};
     } else {
@@ -5619,13 +5763,14 @@ Galleria.addTheme = function( theme ) {
     }
 
     var css = false,
-        reg;
+        reg, reg2;
 
     if ( typeof theme.css === 'string' ) {
 
         // look for manually added CSS
         $('link').each(function( i, link ) {
-            reg = new RegExp( theme.css );
+            // Patch for Plone
+            reg = new RegExp( theme.css.replace('\+\+resource\+\+','\\+\\+resource\\+\\+') );
             if ( reg.test( link.href ) ) {
 
                 // we found the css
@@ -5653,15 +5798,15 @@ Galleria.addTheme = function( theme ) {
                     $('script').each(function (i, script) {
                         // look for the theme script
                         reg = new RegExp('galleria\\.' + theme.name.toLowerCase() + '\\.');
-                        if (reg.test(script.src)) {
-
+                        reg2 = new RegExp('galleria\\.io\\/theme\\/' + theme.name.toLowerCase() + '\\/(\\d*\\.*)?(\\d*\\.*)?(\\d*\\/)?js');
+                        if (reg.test(script.src) || reg2.test(script.src)) {
                             // we have a match
                             css = script.src.replace(/[^\/]*$/, '') + theme.css;
 
                             window.setTimeout(function () {
-                                Utils.loadCSS(css, 'galleria-theme', function () {
+                                Utils.loadCSS(css, 'galleria-theme-'+theme.name, function () {
 
-                                    // the themeload trigger
+                                    // run galleries with this theme
                                     _themeLoad(theme);
 
                                 });
@@ -5709,48 +5854,22 @@ Galleria.loadTheme = function( src, options ) {
         err;
 
     // start listening for the timeout onload
-    $( window ).load( function() {
+    $( window ).on('load', function() {
         if ( !loaded ) {
             // give it another 20 seconds
             err = window.setTimeout(function() {
-                if ( !loaded && !Galleria.theme ) {
+                if ( !loaded ) {
                     Galleria.raise( "Galleria had problems loading theme at " + src + ". Please check theme path or load manually.", true );
                 }
             }, 20000);
         }
     });
 
-    // first clear the current theme, if exists
-    Galleria.unloadTheme();
-
     // load the theme
     Utils.loadScript( src, function() {
         loaded = true;
         window.clearTimeout( err );
     });
-
-    return Galleria;
-};
-
-/**
-    unloadTheme unloads the Galleria theme and prepares for a new theme
-
-    @returns Galleria
-*/
-
-Galleria.unloadTheme = function() {
-
-    if ( typeof Galleria.theme == 'object' ) {
-
-        $('script').each(function( i, script ) {
-
-            if( new RegExp( 'galleria\\.' + Galleria.theme.name + '\\.' ).test( script.src ) ) {
-                $( script ).remove();
-            }
-        });
-
-        Galleria.theme = undef;
-    }
 
     return Galleria;
 };
@@ -6006,6 +6125,12 @@ Galleria.raise = function( msg, fatal ) {
 // Add the version
 Galleria.version = VERSION;
 
+Galleria.getLoadedThemes = function() {
+    return $.map(_loadedThemes, function(theme) {
+        return theme.name;
+    });
+};
+
 /**
     A method for checking what version of Galleria the user has installed and throws a readable error if the user needs to upgrade.
     Useful when building plugins that requires a certain version to function.
@@ -6106,11 +6231,22 @@ Galleria.Picture.prototype = {
     */
 
     preload: function( src ) {
-        $( new Image() ).load((function(src, cache) {
+        var $image = $( new Image() ).on( 'load', (function(src, cache) {
             return function() {
                 cache[ src ] = src;
             };
-        }( src, this.cache ))).attr( 'src', src );
+        }( src, this.cache )));
+
+        // due to a bug in safari, need to set srcset first
+        if (src.srcset) {
+            $image.attr( 'srcset', src.srcset );
+        }
+
+        if (src.sizes) {
+            $image.attr( 'sizes', src.sizes );
+        }
+
+        $image.attr( 'src', src );
     },
 
     /**
@@ -6150,7 +6286,7 @@ Galleria.Picture.prototype = {
 
             this.container.appendChild( this.image );
 
-            $('#'+id).load( (function( self, callback ) {
+            $('#'+id).on( 'load', (function( self, callback ) {
                 return function() {
                     window.setTimeout(function() {
                         $( self.image ).css( 'visibility', 'visible' );
@@ -6169,6 +6305,12 @@ Galleria.Picture.prototype = {
         // IE8 opacity inherit bug
         if ( Galleria.IE8 ) {
             $( this.image ).css( 'filter', 'inherit' );
+        }
+
+        // FF shaking images bug:
+        // http://support.galleria.io/discussions/problems/12245-shaking-photos
+        if ( !Galleria.IE && !Galleria.CHROME && !Galleria.SAFARI ) {
+            $( this.image ).css( 'image-rendering', 'optimizequality' );
         }
 
         var reload = false,
@@ -6241,7 +6383,7 @@ Galleria.Picture.prototype = {
                                 },
                                 error: function() {
                                     if ( !resort ) {
-                                        $(new Image()).load( onload ).attr( 'src', img.src );
+                                        $(new Image()).on( 'load', onload ).attr( 'src', img.src );
                                         resort = true;
                                     } else {
                                         Galleria.raise('Could not extract width/height from image: ' + img.src +
@@ -6272,7 +6414,14 @@ Galleria.Picture.prototype = {
         });
 
         // begin load and insert in cache when done
-        $image.load( onload ).on( 'error', onerror ).attr( 'src', src );
+        $image.on( 'load', onload ).on( 'error', onerror );
+        if (src.srcset) {
+            $image.attr( 'srcset', src.srcset );
+        }
+        if (src.sizes) {
+            $image.attr( 'sizes', src.sizes );
+        }
+        $image.attr( 'src', src );
 
         // return the container
         return this.container;
@@ -6624,7 +6773,7 @@ Galleria.Finger = (function() {
                 style.left = self.pos+'px';
                 return;
             }
-            style.MozTransform = style.webkitTransform = 'translate3d(' + self.pos + 'px,0,0)';
+            style.MozTransform = style.webkitTransform = style.transform = 'translate3d(' + self.pos + 'px,0,0)';
             return;
         };
 
@@ -6847,16 +6996,7 @@ $.fn.galleria = function( options ) {
 
 };
 
-// export as AMD or CommonJS
-if ( typeof module === "object" && module && typeof module.exports === "object" ) {
-    module.exports = Galleria;
-} else {
-    window.Galleria = Galleria;
-    if ( typeof define === "function" && define.amd ) {
-        define( "galleria", ['jquery'], function() { return Galleria; } );
-    }
-}
-
 // phew
+return Galleria;
 
-}( jQuery, this ) );
+}));

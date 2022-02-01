@@ -1,0 +1,36 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.js.galleria">
+
+  <browser:resource
+    name="collective.galleria.classic.css"
+    file="resources/themes/classic/galleria.classic.css"
+    />
+
+  <browser:resource
+    name="collective.galleria.classic.js"
+    file="resources/themes/classic/galleria.classic.js"
+    />
+
+  <browser:resource
+    name="collective.galleria.js"
+    file="resources/galleria.js"
+    />
+
+  <browser:resource
+    name="collective.galleria.min.js"
+    file="resources/galleria.min.js"
+    />
+
+  <browser:resourceDirectory
+    name="collective.galleria"
+    directory="resources/images"
+    />
+
+  <browser:resourceDirectory
+    name="collective.galleria.plugins"
+    directory="resources/plugins"
+    />
+
+</configure>

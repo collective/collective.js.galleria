@@ -1,0 +1,19 @@
+<registry
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="collective.js.galleria">
+
+  <records prefix="plone.bundles/galleria.js"
+           interface='Products.CMFPlone.interfaces.IBundleRegistry'>
+
+    <value key="compile">False</value>
+    <value key="merge_with">default</value>
+    <value key="enabled">True</value>
+    <value key="depends">plone</value>
+
+    <value key="jscompilation">++resource++collective.galleria.min.js</value>
+
+    <!-- Please keep this in sync with upgrades.update_last_compilation -->
+    <value key="last_compilation">2021-04-03 15:00:00</value>
+  </records>
+
+</registry>

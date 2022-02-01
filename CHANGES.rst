@@ -4,6 +4,12 @@ Changelog
 1.6.1 (unreleased)
 ----------------
 
+- Add support to Python 3.6, 3.7 and 3.8.
+  [cleberjsantos]
+
+- Add support to Plone 5.2.
+  [cleberjsantos]
+
 - Drop support for Plone 4.x
   [cleberjsantos]
 
@@ -16,6 +22,7 @@ Changelog
 
 - Add replacement in galleria.js for avoid error with jQuery load
   [cleberjsantos]
+
 
 1.2.5 (2013-01-26)
 ------------------

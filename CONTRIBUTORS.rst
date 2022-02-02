@@ -6,6 +6,7 @@ contribution of the following people:
 
 - Nathan VANGHEEM <vangheem@gmail.com>
 - Cleber J Santos <cleber@cleberjsantos.com.br>
+- Wesley Barroso Lopes <wesleybl@gmail.com>
 
 You can find an updated list of package contributors on `GitHub`_.
 

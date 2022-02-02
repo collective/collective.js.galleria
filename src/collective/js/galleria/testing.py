@@ -19,6 +19,7 @@ class Fixture(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'collective.js.galleria:default')
 
+
 FIXTURE = Fixture()
 INTEGRATION_TESTING = IntegrationTesting(
     bases=(FIXTURE,),

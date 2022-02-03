@@ -2,7 +2,7 @@ Changelog
 =========
 
 1.6.1 (unreleased)
-----------------
+------------------
 
 - Add support to Python 3.6, 3.7 and 3.8.
   [cleberjsantos]

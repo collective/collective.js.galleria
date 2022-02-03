@@ -10,8 +10,8 @@ from zope.component import getUtility
 import unittest
 
 
-PROJECTNAME = 'collective.js.galleria'
-JS = '++resource++collective.galleria.min.js'
+PROJECTNAME = "collective.js.galleria"
+JS = "++resource++collective.galleria.min.js"
 
 
 class InstallTestCase(unittest.TestCase):
@@ -20,20 +20,22 @@ class InstallTestCase(unittest.TestCase):
 
     def setUp(self):
         """Custom shared utility setup for tests."""
-        self.portal = self.layer['portal']
-        self.request = self.layer['request']
+        self.portal = self.layer["portal"]
+        self.request = self.layer["request"]
         self.registry = getUtility(IRegistry)
         self.qi_tool = get_installer(self.portal, self.request)
 
     def test_installed(self):
         self.assertTrue(
             self.qi_tool.isProductInstalled(PROJECTNAME),
-            'package appears not to have been installed',
+            "package appears not to have been installed",
         )
 
     def test_jsregistry(self):
-        bundles = self.registry.collectionOfInterface(IBundleRegistry, prefix='plone.bundles')
-        bundle = bundles['galleria.js']
+        bundles = self.registry.collectionOfInterface(
+            IBundleRegistry, prefix="plone.bundles"
+        )
+        bundle = bundles["galleria.js"]
 
         self.assertEqual(bundle.jscompilation, JS)
 
@@ -43,17 +45,19 @@ class UninstallTestCase(unittest.TestCase):
     layer = INTEGRATION_TESTING
 
     def setUp(self):
-        self.portal = self.layer['portal']
-        self.request = self.layer['request']
+        self.portal = self.layer["portal"]
+        self.request = self.layer["request"]
         self.registry = getUtility(IRegistry)
         self.qi_tool = get_installer(self.portal, self.request)
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        setRoles(self.portal, TEST_USER_ID, ["Manager"])
         self.qi_tool.uninstallProducts(products=[PROJECTNAME])
 
     def test_uninstalled(self):
         self.assertFalse(self.qi_tool.isProductInstalled(PROJECTNAME))
 
     def test_jsregistry_removed(self):
-        bundles = self.registry.collectionOfInterface(IBundleRegistry, prefix='plone.bundles')
+        bundles = self.registry.collectionOfInterface(
+            IBundleRegistry, prefix="plone.bundles"
+        )
 
-        self.assertNotIn('galleria.js', bundles.keys())
+        self.assertNotIn("galleria.js", bundles.keys())

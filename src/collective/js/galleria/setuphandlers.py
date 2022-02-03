@@ -8,7 +8,7 @@ class HiddenProfiles(object):
     def getNonInstallableProfiles(self):
         """Hide uninstall profile from site-creation and quickinstaller."""
         return [
-            'collective.js.galleria:uninstall',
+            "collective.js.galleria:uninstall",
         ]
 
 

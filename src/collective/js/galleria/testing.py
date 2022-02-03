@@ -17,16 +17,17 @@ class Fixture(PloneSandboxLayer):
         self.loadZCML(package=collective.js.galleria)
 
     def setUpPloneSite(self, portal):
-        applyProfile(portal, 'collective.js.galleria:default')
+        applyProfile(portal, "collective.js.galleria:default")
+
 
 FIXTURE = Fixture()
 INTEGRATION_TESTING = IntegrationTesting(
     bases=(FIXTURE,),
-    name='collective.js.galleria:Integration',
+    name="collective.js.galleria:Integration",
 )
 
 
 FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(FIXTURE, WSGI_SERVER),
-    name='collective.js.galleria:Functional',
+    name="collective.js.galleria:Functional",
 )

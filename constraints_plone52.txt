@@ -1,5 +1,1 @@
-# Use constraints from the newest Plone version we support.
 -c https://dist.plone.org/release/5.2-latest/requirements.txt
-cffi==1.14.5
-# setuptools==40.2.0
-# zc.buildout==2.12.2

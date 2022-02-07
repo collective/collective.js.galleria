@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.1 (unreleased)
+1.6.1 (2022-02-07)
 ------------------
 
 - Add support to Python 3.6, 3.7 and 3.8.

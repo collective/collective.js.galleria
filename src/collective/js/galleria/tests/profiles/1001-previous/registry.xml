@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<registry>
+
+    <records prefix="plone.bundles/galleria.js"
+            interface='Products.CMFPlone.interfaces.IBundleRegistry'>
+        <value key="jscompilation">++resource++collective.galleria.min.js</value>
+        <value key="last_compilation">2021-04-03 15:00:00</value>
+    </records>
+
+</registry>

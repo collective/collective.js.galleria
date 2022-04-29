@@ -4,7 +4,8 @@ Changelog
 1.6.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use plone resource instead of browser resource.
+  [wesleybl]
 
 
 1.6.1 (2022-02-07)

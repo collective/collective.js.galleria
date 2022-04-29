@@ -1,0 +1,10 @@
+<configure xmlns:gs="http://namespaces.zope.org/genericsetup">
+
+  <gs:registerProfile name="1001-previous"
+    title="Previous bundle"
+    description='Configuration previous of version 1001'
+    directory="profiles/1001-previous"
+    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+    provides="Products.GenericSetup.interfaces.EXTENSION" />
+
+</configure>

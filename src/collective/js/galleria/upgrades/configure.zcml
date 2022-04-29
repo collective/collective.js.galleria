@@ -2,6 +2,6 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="collective.js.galleria">
 
-  <!--include package=".v1000" /-->
+  <include file="1001.zcml" />
 
 </configure>

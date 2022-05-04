@@ -55,11 +55,14 @@ setup(
     install_requires=[
         "setuptools",
         "plone.app.registry",
+        "plone.resource",
         "Products.CMFPlone>=5.2",
     ],
     extras_require={
         "test": [
             "plone.app.testing",
+            "zope.component",
+            "zope.configuration",
         ],
     },
     entry_points="""

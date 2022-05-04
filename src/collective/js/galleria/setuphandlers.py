@@ -5,11 +5,9 @@ from zope.interface import implementer
 
 @implementer(INonInstallable)
 class HiddenProfiles(object):
-    def getNonInstallableProfiles(self):
-        """Hide uninstall profile from site-creation and quickinstaller."""
-        return [
-            "collective.js.galleria:uninstall",
-        ]
+    def getNonInstallableProducts(self):
+        """Hide the upgrades package from prefs_install_products_form."""
+        return ["collective.js.galleria.upgrades"]
 
 
 def post_install(context):

@@ -5,6 +5,7 @@ from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
 from plone.testing.zope import WSGI_SERVER
+from zope.configuration import xmlconfig
 
 import collective.js.galleria
 
@@ -15,6 +16,9 @@ class Fixture(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         self.loadZCML(package=collective.js.galleria)
+        xmlconfig.file(
+            "tests/configure.zcml", collective.js.galleria, context=configurationContext
+        )
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, "collective.js.galleria:default")

@@ -3,6 +3,7 @@ from collective.js.galleria.testing import INTEGRATION_TESTING
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
+from Products.CMFPlone.controlpanel.browser.quickinstaller import ManageProductsView
 from Products.CMFPlone.interfaces import IBundleRegistry
 from Products.CMFPlone.utils import get_installer
 from zope.component import getUtility
@@ -11,7 +12,7 @@ import unittest
 
 
 PROJECTNAME = "collective.js.galleria"
-JS = "++resource++collective.galleria.min.js"
+JS = "++plone++collective.js.galleria/galleria.min.js"
 
 
 class InstallTestCase(unittest.TestCase):
@@ -23,11 +24,11 @@ class InstallTestCase(unittest.TestCase):
         self.portal = self.layer["portal"]
         self.request = self.layer["request"]
         self.registry = getUtility(IRegistry)
-        self.qi_tool = get_installer(self.portal, self.request)
+        self.instaler = get_installer(self.portal, self.request)
 
     def test_installed(self):
         self.assertTrue(
-            self.qi_tool.isProductInstalled(PROJECTNAME),
+            self.instaler.isProductInstalled(PROJECTNAME),
             "package appears not to have been installed",
         )
 
@@ -39,6 +40,16 @@ class InstallTestCase(unittest.TestCase):
 
         self.assertEqual(bundle.jscompilation, JS)
 
+    def test_hide_upgrades_profiles(self):
+        mp = ManageProductsView(self.portal, self.request)
+        profiles = mp.get_available()
+        package_profiles_availables = [
+            profile["id"]
+            for profile in profiles
+            if profile["id"].startswith("collective.js.galleria")
+        ]
+        self.assertEqual([], package_profiles_availables)
+
 
 class UninstallTestCase(unittest.TestCase):
 
@@ -48,12 +59,12 @@ class UninstallTestCase(unittest.TestCase):
         self.portal = self.layer["portal"]
         self.request = self.layer["request"]
         self.registry = getUtility(IRegistry)
-        self.qi_tool = get_installer(self.portal, self.request)
+        self.instaler = get_installer(self.portal, self.request)
         setRoles(self.portal, TEST_USER_ID, ["Manager"])
-        self.qi_tool.uninstallProducts(products=[PROJECTNAME])
+        self.instaler.uninstallProducts(products=[PROJECTNAME])
 
     def test_uninstalled(self):
-        self.assertFalse(self.qi_tool.isProductInstalled(PROJECTNAME))
+        self.assertFalse(self.instaler.isProductInstalled(PROJECTNAME))
 
     def test_jsregistry_removed(self):
         bundles = self.registry.collectionOfInterface(

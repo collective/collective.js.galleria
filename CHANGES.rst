@@ -4,6 +4,9 @@ Changelog
 1.6.2 (unreleased)
 ------------------
 
+- Use ``uglify-js`` node package to uglify Javascript.
+  [wesleybl]
+
 - Use plone resource instead of browser resource.
   [wesleybl]
 

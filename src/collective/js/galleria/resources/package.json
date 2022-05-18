@@ -1,0 +1,30 @@
+{
+  "name": "collective.js.galleria",
+  "version": "1.0.0",
+  "description": "Introduction ============",
+  "main": "galleria.js",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
+  },
+  "scripts": {
+    "uglifyjs": "./node_modules/.bin/uglifyjs --compress --mangle --output galleria.min.js galleria.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/collective/collective.js.galleria.git"
+  },
+  "keywords": [
+    "plone",
+    "galleria"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/collective/collective.js.galleria/issues"
+  },
+  "homepage": "https://github.com/collective/collective.js.galleria#readme",
+  "devDependencies": {
+    "uglify-js": "^3.15.5"
+  }
+}

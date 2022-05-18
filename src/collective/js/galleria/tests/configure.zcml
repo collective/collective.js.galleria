@@ -1,4 +1,5 @@
 <configure xmlns:gs="http://namespaces.zope.org/genericsetup"
+           xmlns:browser="http://namespaces.zope.org/browser"
            xmlns="http://namespaces.zope.org/zope">
 
   <gs:registerProfile name="1001-previous"
@@ -11,6 +12,13 @@
   <utility
       factory="collective.js.galleria.tests.HiddenProfiles"
       name="collective.js.galleria-hiddenprofiles-tests"
+      />
+
+  <browser:page
+      for="*"
+      name="collective.js.galleria.test"
+      permission="zope.Public"
+      template="galleria.pt"
       />
 
 </configure>

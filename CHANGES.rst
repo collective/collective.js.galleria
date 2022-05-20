@@ -4,6 +4,12 @@ Changelog
 1.6.2 (unreleased)
 ------------------
 
+- Allows using resources with ``++plone++`` in CSS definition URL of Galleria theme.
+  [wesleybl]
+
+- Use ``uglify-js`` node package to uglify Javascript.
+  [wesleybl]
+
 - Use plone resource instead of browser resource.
   [wesleybl]
 

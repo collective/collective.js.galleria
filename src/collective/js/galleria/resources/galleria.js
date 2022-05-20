@@ -89,6 +89,15 @@ var doc    = window.document,
     },
     IFRAME = window.parent !== window.self,
 
+    // Patch for Plone
+    // Escapes \+\+ from the urls \+\+resource\+\+, \+\+plone\+\+ and \+\+theme\+\+
+    // to avoid errors in RegExp.
+    _fix_plone_resource_url = (function(url) {
+        return url.replace('\+\+plone\+\+', '\\+\\+plone\\+\\+').replace(
+            '\+\+resource\+\+', '\\+\\+resource\\+\\+').replace(
+                '\+\+theme\+\+', '\\+\\+theme\\+\\+')
+    });
+
     // list of Galleria events
     _eventlist = 'data ready thumbnail loadstart loadfinish image play pause progress ' +
                  'fullscreen_enter fullscreen_exit idle_enter idle_exit rescale ' +
@@ -849,7 +858,8 @@ var doc    = window.document,
 
                 // look for manual css
                 $('link[rel=stylesheet]').each(function() {
-                    if ( new RegExp( href ).test( this.href ) ) {
+                    // Patch for Plone
+                    if ( new RegExp( _fix_plone_resource_url( href ) ).test( this.href ) ) {
                         link = this;
                         return false;
                     }
@@ -5770,7 +5780,7 @@ Galleria.addTheme = function( theme ) {
         // look for manually added CSS
         $('link').each(function( i, link ) {
             // Patch for Plone
-            reg = new RegExp( theme.css.replace('\+\+resource\+\+','\\+\\+resource\\+\\+') );
+            reg = new RegExp( _fix_plone_resource_url(theme.css) );
             if ( reg.test( link.href ) ) {
 
                 // we found the css

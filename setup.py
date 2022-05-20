@@ -60,7 +60,9 @@ setup(
     ],
     extras_require={
         "test": [
+            "plone.app.robotframework[debug]",
             "plone.app.testing",
+            "plone.testing",
             "zope.component",
             "zope.configuration",
         ],

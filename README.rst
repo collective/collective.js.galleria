@@ -79,6 +79,20 @@ As you can see the original code has been patched to support ++resource++ url.
 Starting from version 1.6.1 this package is compatible only with Plone 5.2
 
 
+Uglify Javascript
+=================
+
+To uglify Javascript, we can use the following commands:
+
+.. code-block:: bash
+
+    $ cd src/collective/js/galleria/resources
+    $ yarn install
+    $ yarn uglifyjs
+
+This will generate ``galleria.min.js`` uglify based on ``galleria.js``.
+
+
 Credits
 =======
 

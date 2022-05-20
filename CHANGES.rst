@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.2 (unreleased)
+1.6.2 (2022-05-20)
 ------------------
 
 - Allows using resources with ``++plone++`` in CSS definition URL of Galleria theme.

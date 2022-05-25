@@ -3,6 +3,7 @@ from collective.js.galleria.testing import INTEGRATION_TESTING
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
+from Products.CMFPlone.browser.admin import AddPloneSite
 from Products.CMFPlone.controlpanel.browser.quickinstaller import ManageProductsView
 from Products.CMFPlone.interfaces import IBundleRegistry
 from Products.CMFPlone.utils import get_installer
@@ -49,6 +50,20 @@ class InstallTestCase(unittest.TestCase):
             if profile["id"].startswith("collective.js.galleria")
         ]
         self.assertEqual([], package_profiles_availables)
+
+    def test_hide_extensions_profiles(self):
+        app = self.layer["app"]
+        request = self.layer["request"]
+        add_plone_site = AddPloneSite(app, request)
+        profiles = add_plone_site.profiles()
+        extensions_profiles = profiles["extensions"]
+        profiles_ids = [profile["id"] for profile in extensions_profiles]
+        package_profiles = [
+            profile_id
+            for profile_id in profiles_ids
+            if profile_id.startswith(PROJECTNAME)
+        ]
+        self.assertEqual(["collective.js.galleria:default"], package_profiles)
 
 
 class UninstallTestCase(unittest.TestCase):

@@ -4,7 +4,9 @@ Changelog
 1.6.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix ``AttributeError`` when trying to create a Plone Site on an instance that has
+  ``collective.js.galleria`` available.
+  [wesleybl]
 
 
 1.6.2 (2022-05-20)

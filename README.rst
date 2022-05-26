@@ -57,10 +57,21 @@ to the theme. To make it work in production mode you must add themes javascript
 and css called by the template. 
 ::
 
+    // Patch for Plone
+    // Escapes \+\+ from the urls \+\+resource\+\+, \+\+plone\+\+ and \+\+theme\+\+
+    // to avoid errors in RegExp.
+    _fix_plone_resource_url = (function(url) {
+        return url.replace('\+\+plone\+\+', '\\+\\+plone\\+\\+').replace(
+            '\+\+resource\+\+', '\\+\\+resource\\+\\+').replace(
+                '\+\+theme\+\+', '\\+\\+theme\\+\\+')
+    });
+
+    ...
+
     // look for manually added CSS
     $('link').each(function( i, link ) {
         // Patch for Plone
-        reg = new RegExp( theme.css.replace('\+\+resource\+\+','\\+\\+resource\\+\\+') );
+        reg = new RegExp( _fix_plone_resource_url(theme.css) );
         if ( reg.test( link.href ) ) {
 
             // we found the css
@@ -74,7 +85,7 @@ and css called by the template.
     });
 
 
-As you can see the original code has been patched to support ++resource++ url.
+As you can see the original code has been patched to support ++resource++, ++plone++ and ++theme++ URLs.
 
 Starting from version 1.6.1 this package is compatible only with Plone 5.2
 

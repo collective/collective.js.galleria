@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.3 (unreleased)
+1.6.3 (2022-05-26)
 ------------------
 
 - Fix ``AttributeError`` when trying to create a Plone Site on an instance that has

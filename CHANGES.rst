@@ -4,7 +4,8 @@ Changelog
 1.6.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix invalid specifier erro in python_requires.
+  [mauvictor]
 
 
 1.6.3 (2022-05-26)

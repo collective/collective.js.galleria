@@ -6,7 +6,6 @@ from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
 from plone.testing.zope import WSGI_SERVER
-from zope.configuration import xmlconfig
 
 import collective.js.galleria
 

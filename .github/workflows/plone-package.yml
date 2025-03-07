@@ -7,13 +7,13 @@ on: [push]
 
 jobs:
     build:
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-22.04
         strategy:
             fail-fast: false
             matrix:
                 plone-version:
                   - 'Plone52'
-                python-version: [3.6, 3.7, 3.8]
+                python-version: [3.7, 3.8]
 
         steps:
             - uses: actions/checkout@v4

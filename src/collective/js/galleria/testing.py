@@ -16,7 +16,7 @@ class Fixture(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         self.loadZCML(package=collective.js.galleria)
-        self.loadZCML(file="tests/configure.zcml", package=collective.js.galleria)
+        self.loadZCML(name="tests/configure.zcml", package=collective.js.galleria)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, "collective.js.galleria:default")

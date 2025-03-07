@@ -4,6 +4,9 @@ Changelog
 1.6.4 (unreleased)
 ------------------
 
+- Python 2.7 and 3.6 are no longer supported.
+  [mauvictor]
+
 - Fix invalid specifier erro in python_requires.
   [mauvictor]
 

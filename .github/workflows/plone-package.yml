@@ -55,7 +55,7 @@ jobs:
               run: |
                   tox -r -e black-check
             - name: lint
-              run: tox -r -e py38-lint
+              run: tox -r -e lint
             - name: Test with tox
               run: |
                   tox -r

@@ -27,6 +27,7 @@ jobs:
                   #restore-keys: |
                   #  ${{ runner.os }}-tox-
             - name: Set up Python ${{ matrix.python-version }}
+              if: matrix.python-version == 3.8
               uses: actions/setup-python@v5
               with:
                   python-version: ${{ matrix.python-version }}

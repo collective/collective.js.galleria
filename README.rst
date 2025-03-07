@@ -17,7 +17,7 @@ Requirements
 ============
 
 - Plone 5.2 (tested)
-- Python 3.6+, 2.7 (tested)
+- Python 3.7+ (tested)
 
 
 How to install

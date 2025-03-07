@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.js.galleria.testing import COLLECTIVE_JS_GALLERIA_ACCEPTANCE_TESTING
 from plone.app.testing import ROBOT_TEST_LEVEL
 from plone.testing import layered

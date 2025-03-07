@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.js.galleria.testing import INTEGRATION_TESTING
 from datetime import datetime
 from plone.app.testing import applyProfile

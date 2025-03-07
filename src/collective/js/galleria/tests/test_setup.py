@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.js.galleria.testing import INTEGRATION_TESTING
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID

@@ -48,7 +48,7 @@ jobs:
             - name: Install Firefox
               uses: browser-actions/setup-firefox@latest
               with:
-                firefox-version: '102.6.0esr'
+                firefox-version: '136.0'
             - name: Xvfb
               run: Xvfb :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
             - name: Black-Check

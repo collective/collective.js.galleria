@@ -27,7 +27,7 @@ jobs:
                   #restore-keys: |
                   #  ${{ runner.os }}-tox-
             - name: Set up Python ${{ matrix.python-version }}
-              if: matrix.python-version == 3.8
+              if: matrix.python-version != 3.7
               uses: actions/setup-python@v5
               with:
                   python-version: ${{ matrix.python-version }}
@@ -36,11 +36,21 @@ jobs:
               run: |
                 sudo add-apt-repository ppa:deadsnakes/ppa -y
                 sudo apt-get update
+                sudo apt remove python3-typing-extensions
                 sudo apt-get install python3.7 python3.7-dev python3.7-venv -y
-                # Create a virtual environment with Python 3.7
-                python3.7 -m venv $HOME/py37-venv
-                source $HOME/py37-venv/bin/activate
+                # Configure update-alternatives to make "python" use python3.7:
+                sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1
+                sudo update-alternatives --set python /usr/bin/python3.7
                 python --version
+            - name: Install system libraries
+              run: sudo apt-get install libxml2-dev libxslt1-dev libjpeg-dev
+            - name: setup buildout cache
+              run: |
+                  mkdir -p ~/buildout-cache/{eggs,downloads}
+                  mkdir ~/.buildout
+                  echo "[buildout]" > $HOME/.buildout/default.cfg
+                  echo "download-cache = $HOME/buildout-cache/downloads" >> $HOME/.buildout/default.cfg
+                  echo "eggs-directory = $HOME/buildout-cache/eggs" >> $HOME/.buildout/default.cfg
             - name: Install dependencies
               run: |
                   python -m pip install --upgrade pip
@@ -58,7 +68,7 @@ jobs:
               run: tox -r -e lint
             - name: Test with tox
               run: |
-                  tox -r
+                  VIRTUALENV_PIP=24.0 tox -r
               env:
                 DISPLAY: :99
                 PLONE-VERSION: ${{ matrix.plone-version }}

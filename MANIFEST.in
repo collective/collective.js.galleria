@@ -1,4 +1,6 @@
 graft src/collective
 graft docs
 include *.rst
+include *.txt
+exclude include *.yml tox.ini
 global-exclude *.pyc

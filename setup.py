@@ -16,7 +16,7 @@ long_description = "\n\n".join(
 
 setup(
     name="collective.js.galleria",
-    version="1.7.0",
+    version="1.7.1.dev0",
     description="Register Galleria JQuery plugin in Plone",
     long_description=long_description,
     # Get more from https://pypi.org/classifiers/

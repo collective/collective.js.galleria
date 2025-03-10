@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.4 (unreleased)
+1.7.0 (2025-03-10)
 ------------------
 
 - Python 2.7 and 3.6 are no longer supported.
